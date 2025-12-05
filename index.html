@@ -4,16 +4,64 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quiz Sejarah Indonesia</title>
+
   <style>
     body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; text-align: center; }
     .container { max-width: 600px; margin: auto; padding: 20px; }
     .screen { display: none; }
-    button { padding: 10px 20px; margin: 10px; font-size: 16px; cursor: pointer; border-radius: 8px; border: none; background: #007bff; color: white; }
-    .option { display: block; padding: 10px; margin: 8px 0; background: #fff; border-radius: 8px; border: 2px solid #ddd; cursor: pointer; }
+
+    /* ----- HALAMAN PERTAMA DENGAN BACKGROUND GAMBAR ----- */
+    #welcome {
+      position: relative;
+      color: white;
+      padding: 60px 20px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-image: url('Image/Foto1.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+
+    #welcome::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(2px);
+    }
+
+    #welcome * { position: relative; z-index: 2; }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 8px;
+      border: none;
+      background: #5885b4;
+      color: white;
+    }
+
+    .option {
+      display: block;
+      padding: 10px;
+      margin: 8px 0;
+      background: #fff;
+      border-radius: 8px;
+      border: 2px solid #ddd;
+      cursor: pointer;
+    }
+
     .correct { background: #4CAF50 !important; color: white; }
     .wrong { background: #f44336 !important; color: white; }
+
   </style>
 </head>
+
 <body>
   <div class="container">
 
@@ -24,18 +72,26 @@
       <button onclick="goToLevelSelect()">Start</button>
     </div>
 
-    <!-- Level Selection Screen -->
-    <div id="levelSelect" class="screen">
-      <h2>Pilih Level</h2>
-      <button onclick="startLevel(1)">Level 1</button>
-      <button onclick="startLevel(2)">Level 2</button>
-      <button onclick="startLevel(3)">Level 3</button>
-    </div>
+   <!-- Level Selection Screen -->
+<div id="levelSelect" class="screen" style="background:#d9d9d9; padding:40px 0; min-height:100vh;">
+  <h2>Pilih Level</h2>
+  <button onclick="startLevel(1)">Level 1</button>
+  <button onclick="startLevel(2)">Level 2</button>
+  <button onclick="startLevel(3)">Level 3</button>
+</div>
+
 
     <!-- Quiz Screen -->
     <div id="quiz" class="screen">
       <h2 id="questionText"></h2>
       <div id="options"></div>
+    </div>
+
+    <!-- Result Screen -->
+    <div id="resultScreen" class="screen">
+      <h2>Hasil Akhir</h2>
+      <h3 id="finalScore"></h3>
+      <button onclick="showScreen('levelSelect')">Kembali ke Menu Level</button>
     </div>
 
   </div>
@@ -84,6 +140,7 @@
 
     let currentLevel = 1;
     let index = 0;
+    let score = 0;
 
     function goToLevelSelect() {
       showScreen("levelSelect");
@@ -92,6 +149,7 @@
     function startLevel(lv) {
       currentLevel = lv;
       index = 0;
+      score = 0; // RESET score tiap mulai level baru
       showScreen("quiz");
       loadQuestion();
     }
@@ -117,15 +175,26 @@
 
       if (selected === correct) {
         element.classList.add("correct");
+        score++; // Tambah skor
       } else {
         element.classList.add("wrong");
       }
 
       setTimeout(() => {
         index++;
-        if (index < 10) loadQuestion();
-        else showScreen("levelSelect");
+        if (index < 10) {
+          loadQuestion();
+        } else {
+          showResult();
+        }
       }, 600);
+    }
+
+    function showResult() {
+      document.getElementById("finalScore").innerText =
+        `Score Level ${currentLevel}: ${score} / 10`;
+
+      showScreen("resultScreen");
     }
 
     function showScreen(id) {
