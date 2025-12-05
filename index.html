@@ -10,7 +10,7 @@
     .container { max-width: 600px; margin: auto; padding: 20px; }
     .screen { display: none; }
 
-    /* ----- HALAMAN PERTAMA DENGAN BACKGROUND GAMBAR ----- */
+    /* Halaman pertama dengan background */
     #welcome {
       position: relative;
       color: white;
@@ -20,7 +20,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background-image: url('Foto1.jpg');
+      background-image: url('Image/Foto1.jpg');
       background-size: cover;
       background-position: center;
     }
@@ -54,10 +54,11 @@
       border-radius: 8px;
       border: 2px solid #ddd;
       cursor: pointer;
+      transition: 0.2s;
     }
 
-    .correct { background: #4CAF50 !important; color: white; }
-    .wrong { background: #f44336 !important; color: white; }
+    .correct { background: #4CAF50 !important; color: white; border-color: #4CAF50; }
+    .wrong { background: #f44336 !important; color: white; border-color: #f44336; }
 
   </style>
 </head>
@@ -72,14 +73,13 @@
       <button onclick="goToLevelSelect()">Start</button>
     </div>
 
-   <!-- Level Selection Screen -->
-<div id="levelSelect" class="screen" style="background:#d9d9d9; padding:40px 0; min-height:100vh;">
-  <h2>Pilih Level</h2>
-  <button onclick="startLevel(1)">Level 1</button>
-  <button onclick="startLevel(2)">Level 2</button>
-  <button onclick="startLevel(3)">Level 3</button>
-</div>
-
+    <!-- Level Selection Screen -->
+    <div id="levelSelect" class="screen" style="background:#d9d9d9; padding:40px 0; min-height:100vh;">
+      <h2>Pilih Level</h2>
+      <button onclick="startLevel(1)">Level 1</button>
+      <button onclick="startLevel(2)">Level 2</button>
+      <button onclick="startLevel(3)">Level 3</button>
+    </div>
 
     <!-- Quiz Screen -->
     <div id="quiz" class="screen">
@@ -149,7 +149,7 @@
     function startLevel(lv) {
       currentLevel = lv;
       index = 0;
-      score = 0; // RESET score tiap mulai level baru
+      score = 0;
       showScreen("quiz");
       loadQuestion();
     }
@@ -170,15 +170,29 @@
       }
     }
 
+    /* ------------------ FITUR: JAWABAN SALAH = MERAH, JAWABAN BENAR = HIJAU ------------------ */
     function checkAnswer(selected, element) {
-      const correct = questions[currentLevel][index].a;
+      const qData = questions[currentLevel][index];
+      const correct = qData.a;
 
       if (selected === correct) {
         element.classList.add("correct");
-        score++; // Tambah skor
+        score++;
       } else {
         element.classList.add("wrong");
+
+        // Highlight jawaban benar
+        const all = document.getElementById("options").children;
+        for (let opt of all) {
+          if (opt.innerText.startsWith(correct + ".")) {
+            opt.classList.add("correct");
+          }
+        }
       }
+
+      // Disable semua option agar tidak bisa klik lagi
+      const allOptions = document.querySelectorAll(".option");
+      allOptions.forEach(opt => opt.style.pointerEvents = "none");
 
       setTimeout(() => {
         index++;
@@ -187,7 +201,7 @@
         } else {
           showResult();
         }
-      }, 600);
+      }, 900);
     }
 
     function showResult() {
