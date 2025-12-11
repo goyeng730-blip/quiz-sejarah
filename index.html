@@ -1,220 +1,220 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quiz Sejarah Indonesia</title>
+  <!DOCTYPE html>
+  <html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz Sejarah Indonesia</title>
 
-  <style>
-    body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; text-align: center; }
-    .container { max-width: 600px; margin: auto; padding: 20px; }
-    .screen { display: none; }
+    <style>
+      body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; text-align: center; }
+      .container { max-width: 600px; margin: auto; padding: 20px; }
+      .screen { display: none; }
 
-    /* Halaman pertama dengan background */
-    #welcome {
-      position: relative;
-      color: white;
-      padding: 60px 20px;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background-image: url('Foto1.jpg');
-      background-size: cover;
-      background-position: center;
-    }
-
-    #welcome::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.55);
-      backdrop-filter: blur(2px);
-    }
-
-    #welcome * { position: relative; z-index: 2; }
-
-    button {
-      padding: 10px 20px;
-      margin: 10px;
-      font-size: 16px;
-      cursor: pointer;
-      border-radius: 8px;
-      border: none;
-      background: #5885b4;
-      color: white;
-    }
-
-    .option {
-      display: block;
-      padding: 10px;
-      margin: 8px 0;
-      background: #fff;
-      border-radius: 8px;
-      border: 2px solid #ddd;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .correct { background: #4CAF50 !important; color: white; border-color: #4CAF50; }
-    .wrong { background: #f44336 !important; color: white; border-color: #f44336; }
-
-  </style>
-</head>
-
-<body>
-  <div class="container">
-
-    <!-- Welcome Screen -->
-    <div id="welcome" class="screen" style="display:block;">
-      <h1>Selamat Datang di Quiz Sejarah Indonesia</h1>
-      <p>Uji pengetahuanmu tentang suku, budaya, adat istiadat, dan provinsi di Indonesia!</p>
-      <button onclick="goToLevelSelect()">Start</button>
-    </div>
-
-    <!-- Level Selection Screen -->
-    <div id="levelSelect" class="screen" style="background:#d9d9d9; padding:40px 0; min-height:100vh;">
-      <h2>Pilih Level</h2>
-      <button onclick="startLevel(1)">Level 1</button>
-      <button onclick="startLevel(2)">Level 2</button>
-      <button onclick="startLevel(3)">Level 3</button>
-    </div>
-
-    <!-- Quiz Screen -->
-    <div id="quiz" class="screen">
-      <h2 id="questionText"></h2>
-      <div id="options"></div>
-    </div>
-
-    <!-- Result Screen -->
-    <div id="resultScreen" class="screen">
-      <h2>Hasil Akhir</h2>
-      <h3 id="finalScore"></h3>
-      <button onclick="showScreen('levelSelect')">Kembali ke Menu Level</button>
-    </div>
-
-  </div>
-
-  <script>
-    const questions = {
-      1: [
-        { q: "Suku Dayak berasal dari pulau?", a: "a", options: {a:"Kalimantan", b:"Jawa", c:"Sumatra", d:"Sulawesi"} },
-        { q: "Rumah adat Joglo berasal dari?", a: "b", options: {a:"Bali", b:"Jawa Tengah", c:"NTT", d:"Aceh"} },
-        { q: "Tari Saman berasal dari provinsi?", a: "d", options: {a:"NTB", b:"Jawa Barat", c:"Papua", d:"Aceh"} },
-        { q: "Suku Minang terkenal dengan rumah adat?", a: "c", options: {a:"Joglo", b:"Tongkonan", c:"Rumah Gadang", d:"Limas"} },
-        { q: "Pulau Bali terkenal dengan budaya?", a: "a", options: {a:"Hindu", b:"Islam", c:"Budha", d:"Kristen"} },
-        { q: "Suku Batak berasal dari?", a: "b", options: {a:"Jawa", b:"Sumatra Utara", c:"NTT", d:"Kalimantan"} },
-        { q: "Sasando adalah alat musik dari?", a: "c", options: {a:"Papua", b:"Jawa", c:"NTT", d:"Aceh"} },
-        { q: "Rumah Tongkonan berasal dari?", a: "d", options: {a:"Sumsel", b:"Lampung", c:"Bali", d:"Toraja"} },
-        { q: "Upacara Ngaben berasal dari?", a: "a", options: {a:"Bali", b:"Papua", c:"Jambi", d:"NTB"} },
-        { q: "Suku Asmat berasal dari?", a: "d", options: {a:"Sumatra", b:"Jawa", c:"Sulawesi", d:"Papua"} }
-      ],
-
-      2: [
-        { q: "Provinsi paling barat di Indonesia?", a: "b", options: {a:"Riau", b:"Aceh", c:"Sumbar", d:"Banten"} },
-        { q: "Tari Kecak berasal dari?", a: "a", options: {a:"Bali", b:"NTB", c:"Sulsel", d:"Papua"} },
-        { q: "Rumah Honai berasal dari?", a: "d", options: {a:"Jabar", b:"Jatim", c:"NTT", d:"Papua"} },
-        { q: "Suku Bugis berasal dari?", a: "c", options: {a:"Jambi", b:"Bali", c:"Sulawesi Selatan", d:"Sumsel"} },
-        { q: "Rendang berasal dari?", a: "b", options: {a:"Aceh", b:"Sumbar", c:"NTB", d:"Bali"} },
-        { q: "Rumah adat Limas berasal dari?", a: "d", options: {a:"Papua", b:"NTB", c:"Jambi", d:"Sumsel"} },
-        { q: "Alat musik Angklung berasal dari?", a: "a", options: {a:"Jawa Barat", b:"Bali", c:"NTT", d:"Maluku"} },
-        { q: "Upacara Kasada berasal dari?", a: "c", options: {a:"Papua", b:"Jambi", c:"Suku Tengger", d:"Batak"} },
-        { q: "Danau Toba berada di provinsi?", a: "b", options: {a:"Sumbar", b:"Sumut", c:"Aceh", d:"Riau"} },
-        { q: "Suku Toraja berasal dari?", a: "d", options: {a:"Jabar", b:"Banten", c:"Maluku", d:"Sulawesi Selatan"} }
-      ],
-
-      3: [
-        { q: "Tari Piring berasal dari?", a: "a", options: {a:"Sumbar", b:"Lampung", c:"NTB", d:"Aceh"} },
-        { q: "Rumah Balai Batak berasal dari?", a: "d", options: {a:"NTT", b:"Papua", c:"Jatim", d:"Sumut"} },
-        { q: "Lagu Ampar-Ampar Pisang berasal dari?", a: "b", options: {a:"Jatim", b:"Kalimantan Selatan", c:"Papua", d:"NTT"} },
-        { q: "Ciri khas Suku Baduy adalah?", a: "c", options: {a:"Rumah Gadang", b:"Tato Wajah", c:"Hidup Sederhana", d:"Topi Anyaman"} },
-        { q: "Rumah Buton berasal dari?", a: "a", options: {a:"Sulawesi Tenggara", b:"Sumsel", c:"Jabar", d:"NTB"} },
-        { q: "Tari Jaipong berasal dari?", a: "c", options: {a:"Papua", b:"Bali", c:"Jawa Barat", d:"Riau"} },
-        { q: "Provinsi terbaru Indonesia sebelum pemekaran terakhir?", a: "d", options: {a:"Kaltara", b:"Gorontalo", c:"Maluku Utara", d:"Sulawesi Barat"} },
-        { q: "Suku Dani berasal dari?", a: "a", options: {a:"Papua", b:"Sumbar", c:"NTT", d:"Maluku"} },
-        { q: "Rumah Baileo berasal dari?", a: "d", options: {a:"Jatim", b:"Papua", c:"NTT", d:"Maluku"} },
-        { q: "Tari Cakalele berasal dari?", a: "b", options: {a:"Aceh", b:"Maluku", c:"Jambi", d:"Papua"} }
-      ]
-    };
-
-    let currentLevel = 1;
-    let index = 0;
-    let score = 0;
-
-    function goToLevelSelect() {
-      showScreen("levelSelect");
-    }
-
-    function startLevel(lv) {
-      currentLevel = lv;
-      index = 0;
-      score = 0;
-      showScreen("quiz");
-      loadQuestion();
-    }
-
-    function loadQuestion() {
-      const q = questions[currentLevel][index];
-      document.getElementById("questionText").innerText = q.q;
-
-      const optDiv = document.getElementById("options");
-      optDiv.innerHTML = "";
-
-      for (let key in q.options) {
-        const div = document.createElement("div");
-        div.className = "option";
-        div.innerText = `${key}. ${q.options[key]}`;
-        div.onclick = () => checkAnswer(key, div);
-        optDiv.appendChild(div);
+      /* Halaman pertama dengan background */
+      #welcome {
+        position: relative;
+        color: white;
+        padding: 60px 20px;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-image: url('Image/Foto1.jpg');
+        background-size: cover;
+        background-position: center;
       }
-    }
 
-    /* ------------------ FITUR: JAWABAN SALAH = MERAH, JAWABAN BENAR = HIJAU ------------------ */
-    function checkAnswer(selected, element) {
-      const qData = questions[currentLevel][index];
-      const correct = qData.a;
+      #welcome::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(2px);
+      }
 
-      if (selected === correct) {
-        element.classList.add("correct");
-        score++;
-      } else {
-        element.classList.add("wrong");
+      #welcome * { position: relative; z-index: 2; }
 
-        // Highlight jawaban benar
-        const all = document.getElementById("options").children;
-        for (let opt of all) {
-          if (opt.innerText.startsWith(correct + ".")) {
-            opt.classList.add("correct");
+      button {
+        padding: 10px 20px;
+        margin: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 8px;
+        border: none;
+        background: #5885b4;
+        color: white;
+      }
+
+      .option {
+        display: block;
+        padding: 10px;
+        margin: 8px 0;
+        background: #fff;
+        border-radius: 8px;
+        border: 2px solid #ddd;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+
+      .correct { background: #4CAF50 !important; color: white; border-color: #4CAF50; }
+      .wrong { background: #f44336 !important; color: white; border-color: #f44336; }
+
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+
+      <!-- Welcome Screen -->
+      <div id="welcome" class="screen" style="display:block;">
+        <h1>Selamat Datang di Quiz Sejarah Indonesia</h1>
+        <p>Uji pengetahuanmu tentang suku, budaya, adat istiadat, dan provinsi di Indonesia!</p>
+        <button onclick="goToLevelSelect()">Start</button>
+      </div>
+
+      <!-- Level Selection Screen -->
+      <div id="levelSelect" class="screen" style="background:#d9d9d9; padding:40px 0; min-height:100vh;">
+        <h2>Pilih Level</h2>
+        <button onclick="startLevel(1)">Level 1</button>
+        <button onclick="startLevel(2)">Level 2</button>
+        <button onclick="startLevel(3)">Level 3</button>
+      </div>
+
+      <!-- Quiz Screen -->
+      <div id="quiz" class="screen">
+        <h2 id="questionText"></h2>
+        <div id="options"></div>
+      </div>
+
+      <!-- Result Screen -->
+      <div id="resultScreen" class="screen">
+        <h2>Hasil Akhir</h2>
+        <h3 id="finalScore"></h3>
+        <button onclick="showScreen('levelSelect')">Kembali ke Menu Level</button>
+      </div>
+
+    </div>
+
+    <script>
+      const questions = {
+        1: [
+          { q: "Suku Dayak berasal dari pulau?", a: "a", options: {a:"Kalimantan", b:"Jawa", c:"Sumatra", d:"Sulawesi"} },
+          { q: "Rumah adat Joglo berasal dari?", a: "b", options: {a:"Bali", b:"Jawa Tengah", c:"NTT", d:"Aceh"} },
+          { q: "Tari Saman berasal dari provinsi?", a: "d", options: {a:"NTB", b:"Jawa Barat", c:"Papua", d:"Aceh"} },
+          { q: "Suku Minang terkenal dengan rumah adat?", a: "c", options: {a:"Joglo", b:"Tongkonan", c:"Rumah Gadang", d:"Limas"} },
+          { q: "Pulau Bali terkenal dengan budaya?", a: "a", options: {a:"Hindu", b:"Islam", c:"Budha", d:"Kristen"} },
+          { q: "Suku Batak berasal dari?", a: "b", options: {a:"Jawa", b:"Sumatra Utara", c:"NTT", d:"Kalimantan"} },
+          { q: "Sasando adalah alat musik dari?", a: "c", options: {a:"Papua", b:"Jawa", c:"NTT", d:"Aceh"} },
+          { q: "Rumah Tongkonan berasal dari?", a: "d", options: {a:"Sumsel", b:"Lampung", c:"Bali", d:"Toraja"} },
+          { q: "Upacara Ngaben berasal dari?", a: "a", options: {a:"Bali", b:"Papua", c:"Jambi", d:"NTB"} },
+          { q: "Suku Asmat berasal dari?", a: "d", options: {a:"Sumatra", b:"Jawa", c:"Sulawesi", d:"Papua"} }
+        ],
+
+        2: [
+          { q: "Provinsi paling barat di Indonesia?", a: "b", options: {a:"Riau", b:"Aceh", c:"Sumbar", d:"Banten"} },
+          { q: "Tari Kecak berasal dari?", a: "a", options: {a:"Bali", b:"NTB", c:"Sulsel", d:"Papua"} },
+          { q: "Rumah Honai berasal dari?", a: "d", options: {a:"Jabar", b:"Jatim", c:"NTT", d:"Papua"} },
+          { q: "Suku Bugis berasal dari?", a: "c", options: {a:"Jambi", b:"Bali", c:"Sulawesi Selatan", d:"Sumsel"} },
+          { q: "Rendang berasal dari?", a: "b", options: {a:"Aceh", b:"Sumbar", c:"NTB", d:"Bali"} },
+          { q: "Rumah adat Limas berasal dari?", a: "d", options: {a:"Papua", b:"NTB", c:"Jambi", d:"Sumsel"} },
+          { q: "Alat musik Angklung berasal dari?", a: "a", options: {a:"Jawa Barat", b:"Bali", c:"NTT", d:"Maluku"} },
+          { q: "Upacara Kasada berasal dari?", a: "c", options: {a:"Papua", b:"Jambi", c:"Suku Tengger", d:"Batak"} },
+          { q: "Danau Toba berada di provinsi?", a: "b", options: {a:"Sumbar", b:"Sumut", c:"Aceh", d:"Riau"} },
+          { q: "Suku Toraja berasal dari?", a: "d", options: {a:"Jabar", b:"Banten", c:"Maluku", d:"Sulawesi Selatan"} }
+        ],
+
+        3: [
+          { q: "Tari Piring berasal dari?", a: "a", options: {a:"Sumbar", b:"Lampung", c:"NTB", d:"Aceh"} },
+          { q: "Rumah Balai Batak berasal dari?", a: "d", options: {a:"NTT", b:"Papua", c:"Jatim", d:"Sumut"} },
+          { q: "Lagu Ampar-Ampar Pisang berasal dari?", a: "b", options: {a:"Jatim", b:"Kalimantan Selatan", c:"Papua", d:"NTT"} },
+          { q: "Ciri khas Suku Baduy adalah?", a: "c", options: {a:"Rumah Gadang", b:"Tato Wajah", c:"Hidup Sederhana", d:"Topi Anyaman"} },
+          { q: "Rumah Buton berasal dari?", a: "a", options: {a:"Sulawesi Tenggara", b:"Sumsel", c:"Jabar", d:"NTB"} },
+          { q: "Tari Jaipong berasal dari?", a: "c", options: {a:"Papua", b:"Bali", c:"Jawa Barat", d:"Riau"} },
+          { q: "Provinsi terbaru Indonesia sebelum pemekaran terakhir?", a: "d", options: {a:"Kaltara", b:"Gorontalo", c:"Maluku Utara", d:"Sulawesi Barat"} },
+          { q: "Suku Dani berasal dari?", a: "a", options: {a:"Papua", b:"Sumbar", c:"NTT", d:"Maluku"} },
+          { q: "Rumah Baileo berasal dari?", a: "d", options: {a:"Jatim", b:"Papua", c:"NTT", d:"Maluku"} },
+          { q: "Tari Cakalele berasal dari?", a: "b", options: {a:"Aceh", b:"Maluku", c:"Jambi", d:"Papua"} }
+        ]
+      };
+
+      let currentLevel = 1;
+      let index = 0;
+      let score = 0;
+
+      function goToLevelSelect() {
+        showScreen("levelSelect");
+      }
+
+      function startLevel(lv) {
+        currentLevel = lv;
+        index = 0;
+        score = 0;
+        showScreen("quiz");
+        loadQuestion();
+      }
+
+      function loadQuestion() {
+        const q = questions[currentLevel][index];
+        document.getElementById("questionText").innerText = q.q;
+
+        const optDiv = document.getElementById("options");
+        optDiv.innerHTML = "";
+
+        for (let key in q.options) {
+          const div = document.createElement("div");
+          div.className = "option";
+          div.innerText = `${key}. ${q.options[key]}`;
+          div.onclick = () => checkAnswer(key, div);
+          optDiv.appendChild(div);
+        }
+      }
+
+      /* ------------------ FITUR: JAWABAN SALAH = MERAH, JAWABAN BENAR = HIJAU ------------------ */
+      function checkAnswer(selected, element) {
+        const qData = questions[currentLevel][index];
+        const correct = qData.a;
+
+        if (selected === correct) {
+          element.classList.add("correct");
+          score++;
+        } else {
+          element.classList.add("wrong");
+
+          // Highlight jawaban benar
+          const all = document.getElementById("options").children;
+          for (let opt of all) {
+            if (opt.innerText.startsWith(correct + ".")) {
+              opt.classList.add("correct");
+            }
           }
         }
+
+        // Disable semua option agar tidak bisa klik lagi
+        const allOptions = document.querySelectorAll(".option");
+        allOptions.forEach(opt => opt.style.pointerEvents = "none");
+
+        setTimeout(() => {
+          index++;
+          if (index < 10) {
+            loadQuestion();
+          } else {
+            showResult();
+          }
+        }, 900);
       }
 
-      // Disable semua option agar tidak bisa klik lagi
-      const allOptions = document.querySelectorAll(".option");
-      allOptions.forEach(opt => opt.style.pointerEvents = "none");
+      function showResult() {
+        document.getElementById("finalScore").innerText =
+          `Score Level ${currentLevel}: ${score} / 10`;
 
-      setTimeout(() => {
-        index++;
-        if (index < 10) {
-          loadQuestion();
-        } else {
-          showResult();
-        }
-      }, 900);
-    }
+        showScreen("resultScreen");
+      }
 
-    function showResult() {
-      document.getElementById("finalScore").innerText =
-        `Score Level ${currentLevel}: ${score} / 10`;
-
-      showScreen("resultScreen");
-    }
-
-    function showScreen(id) {
-      document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
-      document.getElementById(id).style.display = 'block';
-    }
-  </script>
-</body>
-</html>
+      function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+        document.getElementById(id).style.display = 'block';
+      }
+    </script>
+  </body>
+  </html>
